@@ -14,6 +14,7 @@ public class QuizActivity extends Activity {
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final String KEY_QUESTION_CHEATED= "question_cheated";
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -30,6 +31,7 @@ public class QuizActivity extends Activity {
     };
     private int mCurrentIndex = 0;
     private boolean mIsCheater;
+    private boolean[] mQuestionCheated = new boolean[mQuestionBank.length];
 
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getQuestion();
@@ -38,10 +40,12 @@ public class QuizActivity extends Activity {
 
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
+        boolean hasCheated = mQuestionCheated[mCurrentIndex];
 
         int messageResId;
 
-        if (mIsCheater) {
+        if (mIsCheater || hasCheated) {
+            mQuestionCheated[mCurrentIndex] = true;
             messageResId = R.string.judgment_toast;
         } else {
             if (userPressedTrue == answerIsTrue) {
@@ -83,6 +87,7 @@ public class QuizActivity extends Activity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putBooleanArray(KEY_QUESTION_CHEATED, mQuestionCheated);
     }
 
     /**
@@ -147,6 +152,7 @@ public class QuizActivity extends Activity {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mQuestionCheated = savedInstanceState.getBooleanArray(KEY_QUESTION_CHEATED);
         }
         updateQuestion();
     }
