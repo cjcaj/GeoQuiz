@@ -12,6 +12,7 @@ public class QuizActivity extends Activity {
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
+    private Button mPreviousButton;
     private TextView mQuestionTextView;
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
             new TrueFalse(R.string.question_oceans, true),
@@ -30,7 +31,7 @@ public class QuizActivity extends Activity {
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
 
-        int messageResId = 0;
+        int messageResId;
 
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
@@ -43,6 +44,15 @@ public class QuizActivity extends Activity {
 
     private void nextQuestion() {
         mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+        updateQuestion();
+    }
+
+    private void previousQuestion() {
+        if (mCurrentIndex > 0) {
+            mCurrentIndex -= 1;
+        } else {
+            mCurrentIndex = mQuestionBank.length - 1;
+        }
         updateQuestion();
     }
 
@@ -82,6 +92,13 @@ public class QuizActivity extends Activity {
             @Override
             public void onClick(View v) {
                 nextQuestion();
+            }
+        });
+        mPreviousButton = (Button) findViewById(R.id.previous_button);
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                previousQuestion();
             }
         });
         updateQuestion();
