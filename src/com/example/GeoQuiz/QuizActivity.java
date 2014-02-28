@@ -2,6 +2,7 @@ package com.example.GeoQuiz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +33,7 @@ public class QuizActivity extends Activity {
     private int mCurrentIndex = 0;
     private boolean mIsCheater;
     private boolean[] mQuestionCheated = new boolean[mQuestionBank.length];
+    private TextView mBuildTextView;
 
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getQuestion();
@@ -100,6 +102,11 @@ public class QuizActivity extends Activity {
         Log.d(TAG, "onCreate(Bundle) called");
 
         setContentView(R.layout.activity_quiz);
+
+        mBuildTextView = (TextView) findViewById(R.id.build_text_view);
+        CharSequence build_version = "API level " + Build.VERSION.SDK_INT;
+        mBuildTextView.setText(build_version);
+
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
